@@ -14,7 +14,8 @@ Required: measure with Macrobenchmark + Baseline Profiles before and after every
 8. [APK Size Optimization](#apk-size-optimization)
 9. [App Startup & Initialization](#app-startup--initialization)
 10. [Compose Recomposition Performance](#compose-recomposition-performance)
-11. [References](#references)
+11. [Android 17 QPR2 memory budgets (optional)](#android-17-qpr2-memory-budgets-optional)
+12. [References](#references)
 
 ## Google Play Vitals and production targets
 
@@ -1399,6 +1400,14 @@ BasicTextField2(state = state)
 - [ ] Ensure all domain models passed to Compose are `@Immutable` or `@Stable`.
 - [ ] Use `key` and `contentType` in all `LazyColumn`/`LazyRow` items.
 - [ ] Avoid calling `refresh()` on PagingData inside a composable body.
+
+## Android 17 QPR2 memory budgets (optional)
+
+**Use only for a measured memory-constrained workload** on Android 17 QPR2 (full SDK **37.2**) or newer. A `compileSdk` / `targetSdk` value of 37 does not itself enable this feature. See [app memory budgets](https://developer.android.com/topic/performance/memory/app-memory-budgets); do not add a fixed `<memory-budget>` to the generic app template.
+
+Required before opting in: measure the release-optimized app's working set across foreground, perceptible, and background scenarios on representative devices, including image caches and subprocesses. If a limit is justified, declare a baseline `<memory-budget android:maxMb="..." />` under `<application>` in the release manifest; add state/process overrides only when separately measured. More specific clauses follow general clauses because the **last applicable clause wins**. Process usage also counts against the package limit. Debug builds carry additional allocations and must not be used to size the release budget.
+
+For runtime inspection or temporary tightening, compile against the 37.2 minor SDK and gate `MemoryBudgetManager` behind `Build.VERSION.SDK_INT_FULL >= Build.VERSION_CODES_FULL.CINNAMON_BUN_2`. Runtime budgets cannot raise a manifest or system ceiling. Reclaim large caches promptly in an over-budget callback without doing expensive work there. Compare reclaim/swap, frame latency, startup, and low-memory kills before and after on 37.2; remove or raise a restrictive budget if it causes churn or jank. Devices below 37.2 ignore the manifest declaration.
 
 ## References
 - Splash screen: https://developer.android.com/develop/ui/views/launch/splash-screen

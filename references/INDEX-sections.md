@@ -466,6 +466,7 @@ Open when: Macrobenchmark, baseline profiles, vitals, recomposition, startup, AP
   - [Common Hot Paths](android-performance.md#common-hot-paths)
   - [Text Input Performance](android-performance.md#text-input-performance)
   - [Performance Checklist](android-performance.md#performance-checklist)
+- [Android 17 QPR2 memory budgets (optional)](android-performance.md#android-17-qpr2-memory-budgets-optional)
 - [References](android-performance.md#references)
 
 ### android-permissions.md (921 lines)
@@ -1020,7 +1021,7 @@ Open when: Version catalog, BOMs, pins, brownfield alignment, adding dependencie
   - [Rules](dependencies.md#rules)
 - [Dependency Selection](dependencies.md#dependency-selection)
   - [Room 3](dependencies.md#room-3)
-  - [Merged KTX artifacts (do not add the `-ktx` coordinate)](dependencies.md#merged-ktx-artifacts-do-not-add-the--ktx-coordinate)
+  - [Merged KTX artifacts (do not add the `-ktx` coordinate on the pinned versions)](dependencies.md#merged-ktx-artifacts-do-not-add-the--ktx-coordinate-on-the-pinned-versions)
   - [androidx.hilt artifacts](dependencies.md#androidxhilt-artifacts)
   - [Media3](dependencies.md#media3)
   - [Navigation3 and SavedState](dependencies.md#navigation3-and-savedstate)

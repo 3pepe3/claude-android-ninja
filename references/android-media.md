@@ -40,7 +40,7 @@ Use the table as an index only; contracts and samples sit in the linked rows.
 
 ## Media3 version and artifacts
 
-Template pin: `media3` **1.10.1** stable (`1.11.0` is at `rc01` - do not pin it).
+Template pin: `media3` **1.11.1** stable.
 
 Breaking changes in 1.10.0 that an upgrading project will hit:
 
@@ -52,11 +52,11 @@ Breaking changes in 1.10.0 that an upgrading project will hit:
 | Device volume commands from `MediaController` / `MediaBrowser` no longer supported for **local** playback | Use `AudioManager` directly                              |
 | `MediaSessionService` / `MediaLibraryService` now extend `LifecycleService` | Remove any hand-rolled lifecycle plumbing that assumed a plain `Service`  |
 
-Coming in **1.11.0 (rc01 - not the pin)**, listed only so an agent recognizes them as future work rather than adopting them now: dynamic scheduling becomes default-on, `MediaSession` getters throw when called off the application looper, and `AudioSink.configure` becomes a data class.
+When upgrading custom Media3 integrations from 1.10 to 1.11, review dynamic scheduling (now default-on), `MediaSession` getters (they throw when called off the application looper), and `AudioSink.configure` overrides (new parameter data class). The default `MediaSession.Callback.onConnect` now grants untrusted controllers read-only access; override it only when those controllers require explicitly authorized commands, and test trusted versus untrusted controller behavior.
 
 ### Compose player UI (`media3-ui-compose`)
 
-Optional, `1.10.1`: `androidx.media3:media3-ui-compose` and `media3-ui-compose-material3`. Provides `PlayerSurface`, `ContentFrame`, `Player`, `MiniController`, and `remember*State` holders.
+Optional, `1.11.1`: `androidx.media3:media3-ui-compose` and `media3-ui-compose-material3`. Provides `PlayerSurface`, `ContentFrame`, `Player`, `MiniController`, and `remember*State` holders.
 
 The catalog ships only `media3-exoplayer` + `media3-session` (bundle `media3-playback`). `media3-ui-compose`, `media3-inspector-frame`, and `media3-effect-lottie` are opt-in: add a `[libraries]` entry reusing `version.ref = "media3"` when a call site needs one - never a hard-coded version ([dependencies.md](dependencies.md#version-catalog-source-of-truth)).
 

@@ -666,7 +666,7 @@ Compose apps call `setContent { }` on `ComponentActivity`; View-only apps call `
 
 Jetpack **Room 2.x** (`androidx.room`) and **Room 3** (`androidx.room3`) use different Maven coordinates and runtime APIs. The target is **Room 3** on Android with **KSP**, a **`SQLiteDriver`**, and **coroutine-first DAOs** (`suspend`, **`Flow`**). Official background: [Room 3 release notes](https://developer.android.com/jetpack/androidx/releases/room3), [Room 3 announcement](https://android-developers.googleblog.com/2026/03/room-30-modernizing-room.html), and [Save data with Room](https://developer.android.com/training/data-storage/room).
 
-Room 3 is **stable** at `3.0.0`. Do not pin a `3.0.0-alphaNN` / `-rc` build. `androidx.sqlite` requires **minSdk 23**, which is the effective floor for Room 3 on Android.
+Room 3 template pins stable `3.0.3`; do not pin a prerelease build. `3.0.2` fixes an Android driver transaction deadlock, and `3.0.3` fixes an `@Transaction` wrapper failure. `androidx.sqlite` requires **minSdk 23**, which is the effective floor for Room 3 on Android.
 
 Migrating from an earlier Room 3 **alpha** rather than from Room 2? Two renames landed in `3.0.0-rc01` and will not compile against an alpha-era codebase:
 
@@ -957,4 +957,4 @@ Only permanently-private apps distributed inside an organization are exempt. Upl
 
 ### Libraries that force the AGP floor
 
-Several libraries now compile against `compileSdk` 37 and therefore **require AGP >= 9.2.0** in the consuming project: Compose `1.12`, `navigation3` `1.2.0-alpha03+`, `androidx.hilt` `1.4.0` (when using Compose), `androidx.pdf`, `androidx.photopicker`, and `androidx.glance` `1.3.0-alpha`. If a Gradle sync fails immediately after bumping one of these, check the AGP pin before anything else ([gradle-setup.md → AGP requires a minimum Gradle wrapper](gradle-setup.md#agp-requires-a-minimum-gradle-wrapper)).
+Several libraries now compile against `compileSdk` 37 and therefore **require AGP >= 9.2.0** in the consuming project: Compose `1.12`, `navigation3` `1.2.0` stable, `androidx.hilt` `1.4.0` (when using Compose), `androidx.pdf`, `androidx.photopicker`, and `androidx.glance` `1.3.0-alpha`. If a Gradle sync fails immediately after bumping one of these, check the AGP pin before anything else ([gradle-setup.md → AGP requires a minimum Gradle wrapper](gradle-setup.md#agp-requires-a-minimum-gradle-wrapper)).

@@ -213,7 +213,7 @@ com.example.core.model.*
 - Managed devices
 
 ### Room Plugin (Room 3)
-- `androidx.room3` Gradle plugin + KSP. Room 3 is **stable** (`3.0.0`); pin from the version catalog.
+- `androidx.room3` Gradle plugin + KSP. Room 3 is **stable** (`3.0.3` in the template); pin from the version catalog.
 - `room3-runtime` + `sqlite-bundled` (for `BundledSQLiteDriver()` on `Room.databaseBuilder`)
 - `room3-compiler` (KSP); DAOs use **`suspend`** and **`Flow`** (no separate Room KTX artifact)
 - `room3 { schemaDirectory(...) }` - **required** whenever the `androidx.room3` plugin is applied; schemas are emitted per variant and must be committed for schema validation and auto-migrations

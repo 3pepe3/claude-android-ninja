@@ -27,7 +27,7 @@ For files with a `-quick.md` companion, open the **quick** file first; open the 
 → Create `build-logic/settings.gradle.kts` (see `../assets/convention/QUICK_REFERENCE.md`)  
 → Add `includeBuild("build-logic")` to root `settings.gradle.kts`  
 → Add plugin entries to `gradle/libs.versions.toml` (see `../assets/convention/QUICK_REFERENCE.md`)
-→ Copy `../assets/proguard-rules.pro.template` to `app/proguard-rules.pro`
+→ Copy `../assets/proguard-rules.pro.template` to `app/src/main/keepRules/app-rules.keep` for the pinned AGP 9.3 `optimization { }` DSL
 → Read [modularization.md](modularization.md) for structure and module types  
 → Use [gradle-setup.md](gradle-setup.md) for build files and build logic  
 
@@ -36,7 +36,14 @@ For files with a `-quick.md` companion, open the **quick** file first; open the 
 → Use [gradle-setup.md](gradle-setup.md) → "Build Performance" for optimization workflow, diagnostics, and bottleneck troubleshooting  
 → Copy convention plugins from `../assets/convention/` to `build-logic/` in your project  
 → See `../assets/convention/QUICK_REFERENCE.md` for setup instructions and examples  
-→ Copy `../assets/proguard-rules.pro.template` to `app/proguard-rules.pro` for R8 rules  
+→ Copy `../assets/proguard-rules.pro.template` to `app/src/main/keepRules/app-rules.keep` for R8 rules on the pinned AGP 9.3 stack; use `app/proguard-rules.pro` only with the legacy DSL
+
+**Using the optional Android CLI for agent workflows?**
+
+- Check `command -v android` and `android -V` first; the legacy Android SDK `tools/android` binary has the same name but does not implement Android CLI commands. Use this route only if `android -V` identifies the official CLI; do not install or run `android init` without an explicit request. Use the [official command reference](https://developer.android.com/tools/agents/android-cli/commands) to check flags against the installed release.
+- `android info` inspects the SDK/device environment; `android describe` discovers a project's build targets and outputs. If a running Android Studio is connected, use `android studio check` before optional `android studio analyze-file` or `android studio render-compose-preview`.
+- Use `android layout` / `android screen capture` only on a disposable emulator or explicitly authorized test device. Follow [testing.md](testing.md#agent-automation-adb-and-uiautomator) for device safety; never install, clear, or change production app data implicitly.
+- Keep `./gradlew help` and the real `:app:assembleDebug` as required verification after toolchain or module changes ([gradle-setup.md](gradle-setup.md#verify-after-toolchain-or-module-changes)); CLI output is supplemental, not proof of a passing build.
 
 **Setting up code quality / Detekt?**
 → Use [code-quality.md](code-quality.md) for Detekt convention plugin setup  

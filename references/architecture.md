@@ -105,7 +105,7 @@ Four-layer architecture with strict module separation and unidirectional data fl
 | UI         | Jetpack Compose + Material 3                                        |
 | Navigation | Navigation3 + type-safe `NavKey`                                    |
 | DI         | Hilt                                                                |
-| Local DB   | Room 3 stable `3.0.0` (`androidx.room3`, KSP, `SQLiteDriver`); `androidx.sqlite` sets a **minSdk 23** floor, satisfied by the template `minSdk = 24` |
+| Local DB   | Room 3 stable `3.0.3` (`androidx.room3`, KSP, `SQLiteDriver`); `androidx.sqlite` sets a **minSdk 23** floor, satisfied by the template `minSdk = 24` |
 | Async      | Coroutines + `StateFlow` / `Flow`                                   |
 | Modules    | Feature-first + `core/*` per [modularization.md](modularization.md) |
 

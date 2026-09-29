@@ -32,21 +32,22 @@ Always check `assets/libs.versions.toml.template` before adding or changing depe
 | Image loading        | Coil 3.x (`coil-compose` + `coil-network-okhttp`)                            | Glide (only when migrating heavy View-based usage) |
 | JSON serialization   | `kotlinx-serialization`                                                      | Gson (only with deep existing investment)          |
 | Dependency injection | Hilt (required)                                                              | Manual DI, Koin                                    |
-| AndroidX             | Base artifact where KTX was merged in (`androidx.core:core`); `-ktx` only where it still ships code (`lifecycle-runtime-ktx`, `work-runtime-ktx`) | `com.android.support.*` (deprecated); `core-ktx`, `palette-ktx`, `sqlite-ktx` (empty shims) |
+| AndroidX             | Base artifact where KTX was merged in (`androidx.core:core`); `-ktx` only where it still ships code (`lifecycle-runtime-ktx`, `work-runtime-ktx`) | `com.android.support.*` (deprecated); `core-ktx`, `sqlite-ktx` (empty shims on pinned versions) |
 
 Hilt module patterns, scopes, and anti-patterns: [architecture.md → Dependency Injection Setup](architecture.md#dependency-injection-setup).
 
-### Merged KTX artifacts (do not add the `-ktx` coordinate)
+### Merged KTX artifacts (do not add the `-ktx` coordinate on the pinned versions)
 
-These `-ktx` artifacts are now **empty compatibility shims**; their extensions moved into the base artifact. Depend on the base coordinate only.
+The following `-ktx` artifacts are **empty compatibility shims on the template's pinned versions**; their extensions moved into the base artifact. Depend on the base coordinate only.
 
 | Forbidden coordinate      | Use instead              | Merged in            |
 |---------------------------|--------------------------|----------------------|
 | `androidx.core:core-ktx`  | `androidx.core:core`     | `core` 1.19.0        |
 | `androidx.sqlite:sqlite-ktx` | `androidx.sqlite:sqlite` | `sqlite` 2.7.0    |
-| `androidx.palette:palette-ktx` | `androidx.palette:palette` | `palette` 1.1.0 |
 
 `lifecycle-*-ktx` and `work-runtime-ktx` are **not** affected - keep those `-ktx` coordinates.
+
+`palette-ktx` merges into `palette` only on the `1.1.0-alpha01` line. The template pins stable `palette` 1.0.0; do not assume its KTX extensions are included in the base artifact or add a preview dependency to the default catalog. Add a matching `palette-ktx` alias only for a project that uses those extensions on stable 1.0.0.
 
 ### androidx.hilt artifacts
 
@@ -63,7 +64,7 @@ Forbidden: `hilt-navigation-compose` - deprecated, and it pulls `navigation-comp
 
 ### Room 3
 
-Room 3 is **stable** (`androidx.room3` `3.0.0`). Room 2.x (`androidx.room`) is in maintenance (patch releases only).
+Room 3 is **stable** (`androidx.room3` `3.0.3` in the template). Room 2.x (`androidx.room`) is in maintenance (patch releases only).
 
 Required artifacts: `androidx.room3:room3-runtime`, `sqlite-bundled`, KSP `room3-compiler` (see version catalog). DAOs are coroutine-first (`suspend`, `Flow`). Add `room3-paging` only when a DAO returns `PagingSource`; `room3-testing` only for instrumented DB tests.
 
@@ -90,7 +91,7 @@ Optional Media3 artifacts - add a `[libraries]` entry reusing `version.ref = "me
 | `media3-inspector-frame`   | `FrameExtractor` (moved out of `media3-inspector` in 1.10.0)        |
 | `media3-effect-lottie`     | `LottieOverlay` (moved in 1.10.0)                                  |
 
-Template pins `1.10.1` stable; `1.11.0` is `rc01` ([android-media.md → Media3 version and artifacts](android-media.md#media3-version-and-artifacts)).
+Template pins `1.11.1` stable ([android-media.md → Media3 version and artifacts](android-media.md#media3-version-and-artifacts)).
 
 ### Navigation3 and SavedState
 Pin `navigation3` from [Navigation 3 releases](https://developer.android.com/jetpack/androidx/releases/navigation3) (template: latest stable). Pin `savedstateCompose` from [SavedState releases](https://developer.android.com/jetpack/androidx/releases/savedstate) when using `savedstate-compose` with `@Serializable` `NavKey` graphs.
@@ -122,7 +123,7 @@ Greenfield bootstrap pins: [workflows.md](workflows.md) ("Creating a new project
 **Production apps:**
 - Use **stable** versions only (e.g., `1.0.0`) for libraries that offer a stable channel
 - Avoid alpha/beta/RC for **Hilt** and **Coroutines** in production
-- **Room 3:** `3.0.0` is stable - ship it. Do not pin a `3.0.0-alphaNN` / `-rc` build ([Room 3 releases](https://developer.android.com/jetpack/androidx/releases/room3)).
+- **Room 3:** template pins stable `3.0.3`, which fixes `@Transaction` wrapper failures present in earlier 3.0 releases. Do not pin an alpha / RC build ([Room 3 releases](https://developer.android.com/jetpack/androidx/releases/room3)).
 
 **Experimental projects:**
 - Can use alpha/beta for evaluation
@@ -132,17 +133,17 @@ Greenfield bootstrap pins: [workflows.md](workflows.md) ("Creating a new project
 
 These catalog entries stay on a prerelease line until a feature-equivalent stable release ships. Replace each pin with the stable release as soon as one exists. Every other catalog entry must be stable.
 
-- `materialAdaptive` - [Material3 Adaptive 1.2.0](https://developer.android.com/jetpack/androidx/releases/compose-material3-adaptive) is stable, but `material3-adaptive-navigation3` still ships only on the 1.3 pre-release line (currently `1.3.0-rc01`); keep `materialAdaptive` on the 1.3 line until the bridge artifact has a stable coordinate. This artifact is also **not managed by the Compose BOM** - it needs its own version ref.
 - `androidxBiometric` - 1.1.0 stable lacks `BiometricPrompt` content view, logo, and `registerForAuthenticationResult()`; the alpha line is the only source for those APIs.
 - `tracing` - `tracing-wire-android` (Perfetto in-process tracing) is 2.x-only (currently `2.0.0-beta01`); the 1.3 stable line cannot be substituted.
 - `detekt` - 2.x is a new artifact group (`dev.detekt`); 1.23.x lives at `io.gitlab.arturbosch.detekt` and would require swapping coordinates.
 - `screenshot` - Compose Preview Screenshot Testing plugin line (currently `0.0.1-alpha15`); still pre-stable on every stack - bump only from Android Studio / AGP release notes and re-run `screenshotTest` validation after every pin change. Roborazzi is optional visual-regression tooling; pin `io.github.takahirom.roborazzi` artifacts in the catalog only when the project adopts it ([testing.md → Preview Screenshot Testing vs Roborazzi](testing.md#preview-screenshot-testing-vs-roborazzi)).
 
-Stable pins with a prerelease line deliberately **not** adopted:
+Stable template pins and related prerelease lines:
 
-- `navigation3` - template pins the latest **stable** (`1.1.4`). Deep-link APIs (`DeepLinkRequest`, `DeepLinkMatcher`, `UriDeepLinkMatcher`) exist only on the **1.2** alpha line, whose API is still churning ([release notes](https://developer.android.com/jetpack/androidx/releases/navigation3)). 1.2 also raises `compileSdk` to 37 and therefore requires **AGP >= 9.2.0**. Adopt it only when a deep-link requirement cannot wait for 1.2 stable.
+- `navigation3` - template pins **1.2.0 stable**, which includes `DeepLinkRequest`, `DeepLinkMatcher`, `UriDeepLinkMatcher`, and result APIs ([release notes](https://developer.android.com/jetpack/androidx/releases/navigation3)). It compiles against `compileSdk` 37 and requires **AGP >= 9.2.0**.
+- `materialAdaptive` - template pins **1.3.0 stable**, including `adaptive-navigation3` ([release notes](https://developer.android.com/jetpack/androidx/releases/compose-material3-adaptive)). This artifact is **not managed by the Compose BOM** and needs its own version ref.
 - `material3` - template pins `1.4.0` stable. Material 3 **Expressive** APIs ship only on the `1.5.0-alphaNN` line and were removed from the 1.4 line; they are not in the Compose BOM either. Do not mix a 1.5.0-alpha API into a 1.4.0 pin.
-- `media3` - template pins `1.10.1` stable; `1.11.0` is at `rc01`.
+- `media3` - template pins **1.11.1 stable**; see [android-media.md](android-media.md#media3-version-and-artifacts) for changed session behavior.
 - `robolectric` - template pins `4.16.1` stable; `4.17` is beta.
 - `leakcanary` - template pins `2.14` stable; `3.0` is alpha.
 
@@ -352,7 +353,7 @@ dependencies {
 
 Use `assets/proguard-rules.pro.template` as the source of truth for all keep rules. It includes rules for every library in the version catalog (Retrofit, kotlinx-serialization, Room 3, OkHttp, Hilt, SQLCipher, etc.).
 
-Copy the template to `app/proguard-rules.pro` and adjust `com.example.*` package names. See [gradle-setup.md](gradle-setup.md#r8-and-proguard-configuration) for build configuration.
+On the pinned AGP 9.3 stack, copy the template to `app/src/main/keepRules/app-rules.keep` and adjust `com.example.*` package names. Use `app/proguard-rules.pro` only with the legacy DSL. See [gradle-setup.md](gradle-setup.md#r8-and-proguard-configuration) for build configuration.
 
 ## Adding a New Dependency
 
