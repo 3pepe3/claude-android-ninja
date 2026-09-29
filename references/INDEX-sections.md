@@ -423,7 +423,7 @@ Open when: Channels, FGS, MediaStyle, PiP, sharesheet from notification taps
   - [PendingIntent Flags](android-notifications.md#pendingintent-flags)
 - [References](android-notifications.md#references)
 
-### android-performance.md (1417 lines)
+### android-performance.md (1426 lines)
 
 Open when: Macrobenchmark, baseline profiles, vitals, recomposition, startup, APA/Perfetto
 
@@ -1012,7 +1012,7 @@ Open when: Firebase/Sentry interfaces, breadcrumbs, PII scrubbing
   - [Custom Scrubbing for Both Providers](crashlytics.md#custom-scrubbing-for-both-providers)
 - [Gradle & Setup Guidance](crashlytics.md#gradle--setup-guidance)
 
-### dependencies.md (382 lines)
+### dependencies.md (383 lines)
 
 Open when: Version catalog, BOMs, pins, brownfield alignment, adding dependencies
 
@@ -1101,7 +1101,7 @@ Quick routing: [design-patterns-quick.md](design-patterns-quick.md)
   - [Critical Performance Rules](design-patterns.md#critical-performance-rules)
   - [Full-Text Search (FTS) Pattern](design-patterns.md#full-text-search-fts-pattern)
 
-### gradle-setup.md (1321 lines)
+### gradle-setup.md (1318 lines)
 
 Open when: Convention plugins, flavors, R8 audit, build performance, verify Gradle
 
@@ -1424,7 +1424,7 @@ Quick routing: [testing-quick.md](testing-quick.md)
 - [Localization Testing](testing.md#localization-testing)
 - [Cross-references](testing.md#cross-references)
 
-### workflows.md (342 lines)
+### workflows.md (349 lines)
 
 Open when: Task not in Quick Reference; greenfield bootstrap; multi-topic routing
 
